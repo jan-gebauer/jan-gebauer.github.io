@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} · {{ SITENAME }}{% endblock %}
+
+{% block extra_head %}
+<style>
+  /* ── ACTIVITIES GRID ── */
+  .activities {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  .activity-card {
+    background: white;
+    border: var(--border);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 2rem 1.8rem;
+  }
+
+  .activity-card.yellow { background: #FFFBDC; }
+  .activity-card.pink   { background: #FFF0F5; }
+
+  .activity-title {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  /* ── COUNTER ── */
+  .counter-num {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 5.5rem;
+    font-weight: 700;
+    line-height: 1;
+    text-align: center;
+    color: var(--dark);
+    transition: transform 0.12s cubic-bezier(0.34,1.56,0.64,1), color 0.2s;
+    display: block;
+    margin-bottom: 1.2rem;
+  }
+
+  .counter-num.pop { transform: scale(1.25); }
+
+  .counter-btns {
+    display: flex;
+    gap: 0.6rem;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .counter-label {
+    text-align: center;
+    font-size: 0.85rem;
+    color: #888;
+    margin-bottom: 0.5rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* ── DICE ── */
+  .dice-scene {
+    text-align: center;
+    margin-bottom: 1.5rem;
+  }
+
+  .dice-row {
+    display: flex;
+    justify-content: center;
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    min-height: 72px;
+    align-items: center;
+    margin-bottom: 0.6rem;
+  }
+
+  .die {
+    width: 62px;
+    height: 62px;
+    background: white;
+    border: var(--border);
+    border-radius: 12px;
+    box-shadow: var(--shadow);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    transition: transform 0.3s cubic-bezier(0.34,1.56,0.64,1);
+  }
+
+  .die.rolling { animation: spin 0.35s ease; }
+
+  @keyframes spin {
+    0%   { transform: rotate(0deg) scale(0.8); opacity: 0.4; }
+    60%  { transform: rotate(200deg) scale(1.2); }
+    100% { transform: rotate(360deg) scale(1); opacity: 1; }
+  }
+
+  .dice-total {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #666;
+  }
+
+  .dice-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .dice-controls label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+  }
+
+  select {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 0.3rem 0.5rem;
+    border: var(--border);
+    border-radius: 8px;
+    background: white;
+    cursor: pointer;
+    box-shadow: 2px 2px 0 var(--dark);
+  }
+
+  @media (max-width: 560px) {
+    .activities { grid-template-columns: 1fr; }
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="pop-in">{{ page.title }}</h1>
+</div>
+
+{% if page.content %}
+<div class="content pop-in" style="margin-bottom: 2rem;">
+  {{ page.content }}
+</div>
+{% endif %}
+
+<div class="activities">
+
+  <!-- ── COUNTER ── -->
+  <div class="activity-card yellow pop-in">
+    <div class="activity-title">🔢 Clicker Counter</div>
+    <div class="counter-label">Count</div>
+    <span class="counter-num" id="counter-val">0</span>
+    <div class="counter-btns">
+      <button class="btn blue"   onclick="adjustCounter(1)">＋ 1</button>
+      <button class="btn pink"   onclick="adjustCounter(-1)">－ 1</button>
+      <button class="btn"        onclick="resetCounter()">Reset</button>
+    </div>
+  </div>
+
+  <!-- ── DICE ── -->
+  <div class="activity-card pink pop-in">
+    <div class="activity-title">🎲 Dice Roller</div>
+
+    <div class="dice-scene">
+      <div class="dice-row" id="dice-display">
+        <span class="die">?</span>
+        <span class="die">?</span>
+      </div>
+      <div class="dice-total" id="dice-total">Ready to roll!</div>
+    </div>
+
+    <div class="dice-controls">
+      <label>🎲
+        <select id="dice-count" onchange="updateDicePreview()">
+          <option value="1">1 die</option>
+          <option value="2" selected>2 dice</option>
+          <option value="3">3 dice</option>
+          <option value="4">4 dice</option>
+        </select>
+      </label>
+      <label>
+        <select id="dice-sides">
+          <option value="4">d4</option>
+          <option value="6" selected>d6</option>
+          <option value="8">d8</option>
+          <option value="10">d10</option>
+          <option value="12">d12</option>
+          <option value="20">d20</option>
+        </select>
+      </label>
+    </div>
+
+    <div style="text-align:center">
+      <button class="btn orange" onclick="rollDice()">🎲 Roll!</button>
+    </div>
+  </div>
+
+</div>
+
+<div style="text-align:center; margin-top:2.5rem;" class="pop-in">
+  <a href="{{ SITEURL }}/" class="btn purple">← Back home</a>
+</div>
+
+<script src="{{ SITEURL }}/theme/js/activities.js"></script>
+{% endblock %}

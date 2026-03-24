@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+
+{% block title %}{{ page.title }} · {{ SITENAME }}{% endblock %}
+
+{% block extra_head %}
+<style>
+  .contact-card {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .avatar-row {
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    margin-bottom: 1.8rem;
+  }
+
+  .avatar {
+    width: 72px;
+    height: 72px;
+    background: var(--purple);
+    border: var(--border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.2rem;
+    box-shadow: var(--shadow);
+    flex-shrink: 0;
+  }
+
+  .avatar-name {
+    font-family: 'Fredoka', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1.1;
+  }
+
+  .avatar-sub {
+    font-size: 0.9rem;
+    color: #777;
+    margin-top: 0.2rem;
+  }
+
+  .field-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.2rem;
+    border: var(--border);
+    border-radius: 10px;
+    margin-bottom: 0.8rem;
+    background: var(--bg);
+    transition: background 0.15s, box-shadow 0.15s;
+  }
+
+  .field-row:hover {
+    background: var(--yellow);
+    box-shadow: 3px 3px 0 var(--dark);
+  }
+
+  .field-icon { font-size: 1.4rem; }
+
+  .field-inner { display: flex; flex-direction: column; }
+
+  .field-label {
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #888;
+  }
+
+  .field-value {
+    font-size: 1rem;
+    font-weight: 700;
+  }
+
+  .field-value a {
+    color: var(--dark);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .field-value a:hover { color: var(--pink); }
+
+  .back-row {
+    text-align: center;
+    margin-top: 2.5rem;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="page-header">
+  <h1 class="pop-in">{{ page.title }}</h1>
+</div>
+
+<div class="contact-card card pop-in">
+  <div class="avatar-row">
+    <div class="avatar wiggle">😊</div>
+    <div>
+      <div class="avatar-name">{{ AUTHOR }}</div>
+    </div>
+  </div>
+
+  {% for item in CONTACT_FIELDS | default([]) %}
+  <div class="field-row">
+    <span class="field-icon">{{ item.icon }}</span>
+    <div class="field-inner">
+      <span class="field-label">{{ item.label }}</span>
+      <span class="field-value">
+        {% if item.url %}
+          <a href="{{ item.url }}"
+             {% if item.url.startswith('http') %}target="_blank" rel="noopener"{% endif %}>
+            {{ item.value }}
+          </a>
+        {% else %}
+          {{ item.value }}
+        {% endif %}
+      </span>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+<div class="back-row pop-in">
+  <a href="{{ SITEURL }}/" class="btn pink">← Back home</a>
+</div>
+{% endblock %}

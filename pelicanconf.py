@@ -33,3 +33,47 @@ DEFAULT_PAGINATION = False
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
+
+
+# Other
+AUTHOR     = 'Jan Gebauer'
+SITENAME   = 'GitHub Page'
+SITEURL    = ''           # set to full URL for production
+
+PATH       = 'content'
+THEME      = 'theme'      # path to this theme folder
+
+TIMEZONE   = 'Europe/Berlin'
+DEFAULT_LANG = 'en'
+
+# Put pages in the nav — no date-based URLs for pages
+PAGE_URL      = '{slug}.html'
+PAGE_SAVE_AS  = '{slug}.html'
+
+
+CONTACT_FIELDS = [
+    {
+        "icon":  "🪪",
+        "label": "Name",
+        "value": "Jan Gebauer",
+        "url":   None,
+    },
+    {
+        "icon":  "🌐",
+        "label": "Website",
+        "value": "sunshineworks.eu",
+        "url":   "https://sunshineworks.eu",
+    },
+    {
+        "icon":  "📬",
+        "label": "Email",
+        "value": "post@sunshineworks.eu",
+        "url":   "mailto:post@sunshineworks.eu",
+    },
+    {
+        "icon":  "▶️",
+        "label": "YouTube",
+        "value": "Sunshine Works",
+        "url":   "https://www.youtube.com/@sunshineworks",
+    },
+]

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="{{ DEFAULT_LANG }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+
+  <link rel="stylesheet" href="{{ SITEURL }}/theme/css/style.css" />
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+
+  <nav>
+    <a href="{{ SITEURL }}/" class="logo">🌈 {{ SITENAME }}</a>
+
+    <a href="{{ SITEURL }}/"
+       {% if not page is defined and not article is defined %}class="active"{% endif %}>Home</a>
+
+    {# Render pages in nav — filter to only those with Save_as set under pages/ #}
+    {% for p in pages | sort(attribute='title') %}
+      <a href="{{ SITEURL }}/{{ p.url }}"
+         {% if p == page or (page is defined and p.slug == page.slug) %}class="active"{% endif %}>
+        {{ p.title }}
+      </a>
+    {% endfor %}
+  </nav>
+
+  <main>
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer>
+    Made by <a href="{{ SITEURL }}">{{ AUTHOR }}</a> &nbsp;·&nbsp; 2026
+  </footer>
+
+</body>
+</html>
